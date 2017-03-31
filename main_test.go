@@ -44,5 +44,6 @@ var _ = Describe("", func() {
 			Expect(out.String()).To(Equal(string(expected)))
 		},
 		Entry("dev sample", MungeCase{InputFile: "input1", OutputFile: "output1"}),
+		Entry("already done, shouldn't be changed", MungeCase{InputFile: "already_done", OutputFile: "already_done"}),
 	)
 })

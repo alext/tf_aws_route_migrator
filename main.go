@@ -30,21 +30,18 @@ func munge(in io.Reader, out io.Writer) error {
 	}
 
 	root := state.RootModule()
-	if !needsMunging(root) {
-		_, err = io.Copy(out, in)
-		return err
-	}
-
-	newResources := make(map[string]*terraform.ResourceState)
-	for key, resource := range root.Resources {
-		if !strings.Contains(key, "aws_route_table."+routeTableName) {
-			continue
+	if needsMunging(root) {
+		newResources := make(map[string]*terraform.ResourceState)
+		for key, resource := range root.Resources {
+			if !strings.Contains(key, "aws_route_table."+routeTableName) {
+				continue
+			}
+			routeName, route := extractRouteResource(key, resource)
+			newResources[routeName] = route
 		}
-		routeName, route := extractRouteResource(key, resource)
-		newResources[routeName] = route
-	}
-	for key, resource := range newResources {
-		root.Resources[key] = resource
+		for key, resource := range newResources {
+			root.Resources[key] = resource
+		}
 	}
 
 	encoder := json.NewEncoder(out)
