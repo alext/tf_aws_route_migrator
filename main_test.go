@@ -45,5 +45,6 @@ var _ = Describe("", func() {
 		},
 		Entry("dev sample", MungeCase{InputFile: "input1", OutputFile: "output1"}),
 		Entry("already done, shouldn't be changed", MungeCase{InputFile: "already_done", OutputFile: "already_done"}),
+		Entry("empty tfstate file", MungeCase{InputFile: "empty", OutputFile: "empty"}),
 	)
 })
